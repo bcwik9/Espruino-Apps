@@ -1,5 +1,5 @@
-## NodeMCU ESP8266 Espruino Apps
-Variety of lightweight [Espruino](https://github.com/espruino/Espruino) apps for a NodeMCU ESP8266 microcontroller.
+## Esrupino Apps for ESP8266 and ESP32
+Variety of lightweight [Espruino](https://github.com/espruino/Espruino) apps for a ESP8266 or ESP32 microcontroller.
 
 ### General ESP8266 ESP12E Setup
 [Tutorial found here](https://cuneyt.aliustaoglu.biz/en/programming-esp8266-using-javascript-with-espruino/)
