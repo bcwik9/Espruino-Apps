@@ -16,7 +16,7 @@ Variety of lightweight [Espruino](https://github.com/espruino/Espruino) apps for
       - Note: You can use a higher baud rate (230400, 460800, etc) and the flash will be faster, but all devices don't support high baud rates.
 - You should now be able to connect to the ESP8266 by running: `screen /dev/ttyUSB0 115200`
 - Copy and paste the contents of whatever app js file to the ESP8266 terminal
-  - This won't work if you are loading other modules besides Wifi since they need to be uploaded via the web UI
+  - This won't work if you are loading other modules besides Wifi since they need to be uploaded via the [web UI](https://chrome.google.com/webstore/detail/espruino-web-ide/bleoifhkdalbjfbobjackfdifdneehpo?hl=en)
   - First be sure to replace your Wifi credentials in the file!
 - (Optional) Run this command to set the name of your device to something recognizable in your router list and to other devices:
 ```
