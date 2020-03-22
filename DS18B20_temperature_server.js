@@ -1,8 +1,3 @@
-// send data to io.adafruit.com platform
-var adafruit_api_key = 'ADAFRUIT IO API KEY';
-var adafruit_username = 'ADAFRUIT IO USERNAME';
-var adafruit_feed = 'ADAFRUIT IO FEED NAME';
-
 // I2C, for displaying data on a 0.96" OLED SSD1306 screen
 var graphics;
 
@@ -11,22 +6,19 @@ var temps = {};
 var high, low, sum, sensors;
 
 E.on('init', function() {
-  var WIFI_NAME = 'WIFI SSID NAME';
-  var WIFI_OPTIONS = { password: 'WIFI PASSWORD' };
-  var hostname = "EspTemperature";
   var wifi = require('Wifi');
-  wifi.setHostname(hostname);
+  wifi.setHostname("EspBedroomTemp");
   wifi.connect(
-    WIFI_NAME,
-    WIFI_OPTIONS,
+    '<YOUR WIFI SSID NAME>',
+    { password: '<YOUR WIFI PASSWORD>' },
     function(err) {
       if (err) {
         console.log('Connection error: ' + err);
         return;
       }
-      console.log('Wifi connected to: ' + WIFI_NAME);
+      console.log('Wifi connected!');
       setupSensors();
-      setInterval(sendTempToAdafruit, 60000);
+      startMqtt();
       setupDisplay();
     }
   );
@@ -77,8 +69,10 @@ function setupSensors(){
     return require("DS18B20").connect(ow, device);
   });
   if (sensors.length === 0) print("No OneWire devices found");
+  // refresh temps immediately
+  refreshTemps();
   // make sure temps are no older than 5 seconds
-  setInterval(refreshTemps, 5000);
+  //setInterval(refreshTemps, 5000);
 }
 
 function getAverageTemp(){
@@ -86,33 +80,37 @@ function getAverageTemp(){
   return sum/Object.keys(temps).length;
 }
 
-function sendTempToAdafruit(){
-  var avg_temp = getAverageTemp();
-  var payload = JSON.stringify({
-    value: getAverageTemp()
-  });
-  var path = '/api/v2/' + adafruit_username + '/feeds/' + adafruit_feed + '/data';
-  var opts = {
-    host: 'io.adafruit.com',
-    path: path,
-    method: 'POST',
-    protocol: 'https:',
-    headers: {
-      'X-AIO-KEY': adafruit_api_key,
-      'Content-Length': payload.length,
-      'Content-Type': 'application/json'
-    }
-  };
+var mqtt;
 
-  var req = require('http').request(opts, function(res){
-    res.on('data', function(data) {
-     //console.log("HTTP> "+data);
-    });
+function startMqtt(){
+  mqtt = require("tinyMQTT").create('services.lan');
+  var mqtt_publish_interval;
+  mqtt.on('connected', function() {
+    console.log('MQTT connected');
+    mqtt_publish_interval = setInterval(mqttPublish, 60000); // send data
   });
-  req.on('error', function(e) {
-    console.log('problem with request: ' + e.message);
+  mqtt.on('disconnected', function() {
+    console.log("MQTT disconnected... reconnecting.");
+    clearInterval(mqtt_publish_interval);
+    setTimeout(function() {
+      //mqtt.connect(opts);
+      mqtt.connect();
+    }, 1000);
   });
-  req.end(payload);
+  mqtt.connect();
+}
+
+function mqttPublish(){
+  refreshTemps();
+  // don't publish bad data
+  var avg_temp = getAverageTemp();
+  if(avg_temp < 35 || avg_temp > 150){
+    return;
+  }
+  // see https://docs.influxdata.com/influxdb/v1.7/write_protocols/line_protocol_tutorial/
+  var influxDbLine = "temperature,location=bedroom farenheit=" + avg_temp;
+  console.log("influxline: " + influxDbLine);
+  mqtt.publish('temperature', influxDbLine);
 }
 
 save(); // make sure everything loads on restart
