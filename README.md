@@ -2,6 +2,8 @@
 Variety of lightweight [Espruino](https://github.com/espruino/Espruino) apps for a ESP8266 or ESP32 microcontroller.
 
 ## General ESP8266 ESP12E Setup
+[Official flash tutorial](https://www.espruino.com/ESP8266_Flashing)
+
 [Tutorial found here](https://cuneyt.aliustaoglu.biz/en/programming-esp8266-using-javascript-with-espruino/)
 
 [Pinout diagram here](https://lastminuteengineers.com/wp-content/uploads/2018/08/ESP-12E-Development-Board-ESP8266-NodeMCU-Pinout.jpg)
