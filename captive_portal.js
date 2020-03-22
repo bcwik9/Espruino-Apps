@@ -1,7 +1,4 @@
 // WIFI Captive Portal
-// Original:
-// https://gist.github.com/MaBecker/ae9dade26b44524e076ca19f5fd72fab
-// https://gist.githubusercontent.com/wilberforce/cc6025a535b8a4c7e2910d4ba7845f11
 
 var wifi = require('Wifi');
 
