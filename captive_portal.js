@@ -1,24 +1,11 @@
-// Captive Portal
+// WIFI Captive Portal
 // Original:
 // https://gist.github.com/MaBecker/ae9dade26b44524e076ca19f5fd72fab
 // https://gist.githubusercontent.com/wilberforce/cc6025a535b8a4c7e2910d4ba7845f11
 
-var http = require('http');
 var wifi = require('Wifi');
 
-var dgram = require('dgram');
-
-var dns_srv = dgram.createSocket('udp4');
-
-var SSID  = 'CaptivePortalTest';
-var authMode = 'open';
-var password = null;
-var portHTTP = 80;
-var portDNS  = 53;
-
 var dnsIPStr = '192.168.4.1';
-var dnsIP    = dnsIPStr.split('.').map(n => String.fromCharCode(parseInt(n, 10))).join('');
-
 var page = 'building...';
 
 // get Query name out of message
@@ -31,7 +18,7 @@ function dnsQname(msg) {
 	qname +=  msg[i];
 	i++;
     }
-    console.log({qname:qname});
+    //console.log({qname:qname});
     return qname + '\x00';
 }
 
@@ -47,10 +34,13 @@ function dnsResponse(msg,dns_ip){
 }
 
 function startDNSServer(port){
-    dns_srv .on('error', (err) => {
+    var dgram = require('dgram');
+    var dns_srv = dgram.createSocket('udp4');    
+    dns_srv.on('error', (err) => {
 	dns_srv.close();
     });
     dns_srv.on('message', (msg, info) => {
+	var dnsIP = dnsIPStr.split('.').map(n => String.fromCharCode(parseInt(n, 10))).join('');
 	// we only serve ip4
 	if ( msg[msg.length-3] === '\x01') {
 	    dns_srv .send(dnsResponse(msg,dnsIP),info.port,info.address);
@@ -60,21 +50,33 @@ function startDNSServer(port){
 }
 
 function startHttpServer(port){
-    var server = http.createServer(function (req, res) {
+    var server = require('http').createServer(function (req, res) {
 	accept = req.headers.Accept || '';
 	var a = url.parse(req.url, true);
-	console.log( { accept:accept,a :a } );
+	//console.log( { accept:accept,a :a } );
 	if (a.pathname=="/connect") {
 	    res.writeHead(200, {'Content-Type': 'text/plain'});
 	    console.log(a.query);
-	    wifi.connect(a.query.ssid,{password:a.query.pwd},function(){
-		// TODO: If connect fails - this will not happen... need to handle errors
-		console.log("Connected to access point, ",wifi.getIP());
+	    wifi.connect(a.query.ssid,{password:a.query.pwd},function(err){
+		if(err){
+		    // TODO: If connect fails - this will not happen... need to handle errors
+		} else {
+		    console.log("Connected to access point, ", wifi.getIP());
+		}
 		// stop AP after it has time to tell client it connected to wifi
 		setTimeout(function(){
+		    server.close();
+		    //dns_srv.close();
 		    wifi.stopAP();
+		    console.log(wifi.getStatus());
+		    console.log(wifi.getDetails());
+		    //wifi.save();
+		    //wifi.disconnect();
+		    console.log(process.memory());
+		    var json_wifi_info = JSON.stringify(wifi.getDetails());
+		    require("Storage").write("wifi.txt", json_wifi_info);
+		    E.reboot();
 		}, 15000);
-		//wifi.save();
 		res.end(`connected to ${wifi.getIP().ip}`);
 	    });
 	    res.write("Connecting....\n");
@@ -83,7 +85,8 @@ function startHttpServer(port){
 		res.writeHead(200, {'Content-Type': 'text/html'});
 		res.end(page);
 	    } else  { // redirect to the Setup page
-		res.writeHead(302, {'Location': 'http://192.168.4.1',
+		var loc_ip = 'http://' + dnsIPStr;
+		res.writeHead(302, {'Location': loc_ip,
 				    'Content-Type': 'text/plain'});
 		res.end();
 	    }
@@ -95,57 +98,68 @@ function startAccessPoint(ssid,authMode, password){
     wifi.startAP(ssid,{"authMode" : authMode,"password" : password});
 }
 
-function disconnectStation(){
-    wifi.disconnect();
-}
-var scan=[];
-
 function start(){
-    disconnectStation();
-    startAccessPoint('CaptivePortalTest','open',null);
+    wifi.disconnect();
+    startAccessPoint('EPS8266CaptivePortal','open',null);
     startHttpServer(80);
     startDNSServer(53);
 }
 
 function ssidScan(){
     wifi.scan(function(s){
-	scan=s;
+	var scan = s;
 	scan.map( ap => console.log( ap.ssid ) );
 	page=`<!DOCTYPE html>
-	    <title> WiFi</title>
-	    <meta name="viewport" content="initial-scale=1.0">
+     <title> WiFi</title>
+     <meta name="viewport" content="initial-scale=1.0">
 
 
-	    <body>
-	    <html>
-	    <h1>Captive Hotspot</h1>
+     <body>
+     <html>
+     <h1>Captive Hotspot</h1>
 
-	    <form action="/connect" class="pure-form pure-form-aligned">
-	    <fieldset>
-	    <div class="pure-control-group">
-	    <label for="Sid">Access Point</label>
-	    <select name="ssid">`;
+     <form action="/connect" class="pure-form pure-form-aligned">
+     <fieldset>
+     <div class="pure-control-group">
+     <label for="Sid">Access Point</label>
+     <select name="ssid">`;
 	scan.map( ap => page+=`<option>${ap.ssid}</option>`);
 	page+=`</select>
-	    </div>
-	    <div class="pure-control-group">
-	    <label>Password</label>
-	    <input name="pwd" type="text" value="espruino">
-	    </div>
-	    <div class="pure-controls">
-	    <input type="submit" class="pure-button pure-button-primary" value="Connect">
-	    </div>
-	    </fieldset>
-	    </form>
-	    </html>
-	    </body>
-	    `;
+     </div>
+     <div class="pure-control-group">
+     <label>Password</label>
+     <input name="pwd" type="text" value="espruino">
+     </div>
+     <div class="pure-controls">
+     <input type="submit" class="pure-button pure-button-primary" value="Connect">
+     </div>
+     </fieldset>
+     </form>
+     </html>
+     </body>
+     `;
     });
 }
 
 function onInit(){
-    ssidScan();
-    setTimeout(start,3000);
+    var wifi_info = require("Storage").readJSON("wifi.txt");
+    console.log(wifi_info);
+    if(wifi_info === undefined){
+	console.log(wifi.getDetails());
+	//wifi.restore();
+	//console.log(wifi.getDetails());
+	console.log("Starting captive portal...");
+	ssidScan();
+	setTimeout(start, 3000);
+    } else {
+	console.log("Attempting to connect using saved connection...");
+	wifi.connect(wifi_info.ssid, {password: wifi_info.password}, function(err){
+	    if(err){
+		console.log("Connection error: " + err);
+	    } else {
+		console.log("Connected using saved connection!");
+		console.log(wifi.getIP());
+	    }
+	});
+    }
 }
-
-save();
