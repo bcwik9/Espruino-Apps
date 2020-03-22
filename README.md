@@ -33,6 +33,12 @@ wifi.save(); // load hostname even if power loss/restart
 - The USB port you use must provide a good amount of power for a ESP chip to run successfully. Usually a common PC USB port will not provide enough power. If you're having issues, try using a higher power USB port like a RaspberryPi provides.
   - It might appear that the ESP chip is working, but some things will not work until enough power is supplied (ie. you might be able to flash firmware, but not run/connect to Espruino via `screen` command). Certain functions like PWM or pin output might behave oddly.
 
+## [Modules](https://www.espruino.com/Modules)
+[Espruino Modules](https://www.espruino.com/Modules) provide extended functionality for a variety of hardware and software services, such as One Wire interfaces, MQTT and database connections, WIFI functionality, graphical display interface libraries, and more.
+It's a good place for project ideas and sensors.
+
+Additionally, it has instructions on how to write your own custom modules and load them straight from github.
+
 ## Apps
 ### bbq.js: Control the temperature of your smoker or BBQ grill.
 Servo and thermometers control the damper on a smoker or BBQ grill to control the temperature automatically.
