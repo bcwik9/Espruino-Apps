@@ -156,6 +156,9 @@ function onInit(){
 	wifi.connect(wifi_info.ssid, {password: wifi_info.password}, function(err){
 	    if(err){
 		console.log("Connection error: " + err);
+		//console.log("Removing saved details and restarting");
+		//require("Storage").erase("wifi.txt");
+		//E.reboot();
 	    } else {
 		console.log("Connected using saved connection!");
 		console.log(wifi.getIP());
