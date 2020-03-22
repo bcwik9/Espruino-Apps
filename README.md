@@ -1,7 +1,7 @@
-## Esrupino Apps for ESP8266 and ESP32
+# Esrupino Apps for ESP8266 and ESP32
 Variety of lightweight [Espruino](https://github.com/espruino/Espruino) apps for a ESP8266 or ESP32 microcontroller.
 
-### General ESP8266 ESP12E Setup
+## General ESP8266 ESP12E Setup
 [Tutorial found here](https://cuneyt.aliustaoglu.biz/en/programming-esp8266-using-javascript-with-espruino/)
 
 [Pinout diagram here](https://lastminuteengineers.com/wp-content/uploads/2018/08/ESP-12E-Development-Board-ESP8266-NodeMCU-Pinout.jpg)
@@ -25,6 +25,11 @@ wifi.setHostname("MyDeviceName");
 wifi.save(); // load hostname even if power loss/restart
 ```
 
+### Common Issues
+- Not all USB cables support data transport (ie. some only supply power). If you can't connect try a couple different USB cables.
+- The USB port you use must provide a good amount of power for a ESP chip to run. Usually a common PC USB port will not provide enough power. If you're having issues, try using a higher power USB port like a RaspberryPi provides
+
+## Apps
 ### bbq.js: Control the temperature of your smoker or BBQ grill.
 Servo and thermometers control the damper on a smoker or BBQ grill to control the temperature automatically.
 
