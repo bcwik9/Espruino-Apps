@@ -16,6 +16,7 @@ Variety of lightweight [Espruino](https://github.com/espruino/Espruino) apps for
     ```
       - Note: Your device could be on something other than `/dev/ttyUSB0` depending on if you have other things plugged in, etc.
       - Note: You can use a higher baud rate (230400, 460800, etc) and the flash will be faster, but all devices don't support high baud rates.
+    - This command worked for a ESP-01: `esptool.py --port /dev/ttyUSB0 --baud 115200 write_flash --flash_freq 40m --flash_mode qio --flash_size 4m 0x0000 "boot_v1.6.bin" 0x1000 espruino_esp8266_user1.bin 0x7C000 esp_init_data_default.bin 0x7E000 blank.bin`
 - You should now be able to connect to the ESP8266 by running: `screen /dev/ttyUSB0 115200`
 - Copy and paste the contents of whatever app js file to the ESP8266 terminal
   - This won't work if you are loading other modules besides Wifi since they need to be uploaded via the [web UI](https://chrome.google.com/webstore/detail/espruino-web-ide/bleoifhkdalbjfbobjackfdifdneehpo?hl=en)
