@@ -138,6 +138,10 @@ function ssidScan(){
     });
 }
 
+function clearSavedWifiCredentials(){
+    require("Storage").erase("wifi.txt");
+}
+
 function onInit(){
     var wifi_info = require("Storage").readJSON("wifi.txt");
     console.log(wifi_info);
@@ -154,12 +158,17 @@ function onInit(){
 	    if(err){
 		console.log("Connection error: " + err);
 		//console.log("Removing saved details and restarting");
-		//require("Storage").erase("wifi.txt");
+		//clearSavedWifiCredentials();
 		//E.reboot();
 	    } else {
 		console.log("Connected using saved connection!");
 		console.log(wifi.getIP());
+		afterWifiConnected();
 	    }
 	});
     }
+}
+
+function afterWifiConnected(){
+    // PUT YOUR CODE HERE TO RUN WHEN WIFI IS CONNECTED
 }
