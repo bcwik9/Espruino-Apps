@@ -27,7 +27,8 @@ wifi.save(); // load hostname even if power loss/restart
 
 ### Common Issues
 - Not all USB cables support data transport (ie. some only supply power). If you can't connect try a couple different USB cables.
-- The USB port you use must provide a good amount of power for a ESP chip to run. Usually a common PC USB port will not provide enough power. If you're having issues, try using a higher power USB port like a RaspberryPi provides
+- The USB port you use must provide a good amount of power for a ESP chip to run successfully. Usually a common PC USB port will not provide enough power. If you're having issues, try using a higher power USB port like a RaspberryPi provides.
+  - It might appear that the ESP chip is working, but some things will not work until enough power is supplied (ie. you might be able to flash firmware, but not run/connect to Espruino via `screen` command). Certain functions like PWM or pin output might behave oddly.
 
 ## Apps
 ### bbq.js: Control the temperature of your smoker or BBQ grill.
