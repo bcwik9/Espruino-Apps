@@ -39,4 +39,4 @@ wifi.save(); // load hostname even if power loss/restart
 [Espruino Modules](https://www.espruino.com/Modules) provide extended functionality for a variety of hardware and software services, such as One Wire interfaces, MQTT and database connections, WIFI functionality, graphical display interface libraries, and more.
 It's a good place for project ideas and sensors.
 
-Additionally, it has instructions on how to write your own custom modules and load them straight from github.
+There are also [instructions on how to write your own custom modules](https://www.espruino.com/Writing+Modules) and load them straight from github.
