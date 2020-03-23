@@ -28,6 +28,7 @@ var wifi = require('Wifi');
 wifi.setHostname("MyDeviceName");
 wifi.save(); // load hostname even if power loss/restart
 ```
+  - Be careful of saving SSID/password with `wifi.save()`. It doesn't seem to work properly (has connection issue on reconnect/reboot?). Hostname seems to save and load correctly though.
 
 ### Common Issues
 - Not all USB cables support data transport (ie. some only supply power). If you can't connect try a couple different USB cables.
@@ -39,24 +40,3 @@ wifi.save(); // load hostname even if power loss/restart
 It's a good place for project ideas and sensors.
 
 Additionally, it has instructions on how to write your own custom modules and load them straight from github.
-
-## Apps
-### bbq.js: Control the temperature of your smoker or BBQ grill.
-Servo and thermometers control the damper on a smoker or BBQ grill to control the temperature automatically.
-
-### http_server.js: Simple HTTP Server
-A server should be running. Get the IP of the ESP8266 (look at your router's DHCP client list), and navigate to that in a web browser in port 3000 (or whatever you set it to). It should look something like `192.168.0.100:3000`. A page should load.
-
-### DS18B20_temperature_server.js: App that reads one wire temperature sensors (specifically a DS18B20 sensor).
-Additional Setup Instructions:
-- Displays temperature on a [SSD1306 0.96" OLED screen](https://www.espruino.com/SSD1306). Sends temperatures to an [Adafruit IO account](https://io.adafruit.com) once set up.
-
-### relay_server.js: App that controls a relay. Can turn on/off.
-Additional Setup Instructions:
-A server should be running. Get the IP of the ESP8266 (look at your router's DHCP client list), and navigate to that in a web browser in port 3000 (or whatever you set it to). It should look something like `192.168.0.100:3000`. A page should load. Going to `/on` in the browser will turn the relay on; going to `/off` in the browser will turn it off.
-
-### adafruit_http_post.js
-Example of how to use HTTP POST to send data to an [Adafruit IO account](https://io.adafruit.com) once set up.
-
-### adafruit_mqtt.js
-Example of how to use MQTT to send data to an [Adafruit IO account](https://io.adafruit.com) once set up.
