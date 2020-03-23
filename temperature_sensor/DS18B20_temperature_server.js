@@ -9,8 +9,8 @@ E.on('init', function() {
   var wifi = require('Wifi');
   wifi.setHostname("EspBedroomTemp");
   wifi.connect(
-    '<YOUR WIFI SSID NAME>',
-    { password: '<YOUR WIFI PASSWORD>' },
+    '<WIFI SSID HERE>',
+    { password: '<WIFI PASSWORD HERE>' },
     function(err) {
       if (err) {
         console.log('Connection error: ' + err);
@@ -29,15 +29,44 @@ function setupDisplay(){
   var scl_pin = NodeMCU.D2;
   I2C1.setup({scl: scl_pin, sda: sda_pin});
   graphics = require("SSD1306").connect(I2C1);
-  setInterval(writeDisplay, 5000);
+  setInterval(writeDisplay, 60000);
+  writeDisplay();
 }
 
 function writeDisplay(){
   graphics.clear();
+  graphics.setFontAlign(-1,-1);
   graphics.setFontVector(20); // set font size
   var text = getAverageTemp() + ' F';
   graphics.drawString(text, 10, 30);
   graphics.flip(); // write to screen
+  setTimeout(writeDisplayGraph, 30000);
+}
+
+var history = new Float32Array(64);
+
+function writeDisplayGraph() {
+  // quickly move all elements of history back one
+  history.set(new Float32Array(history.buffer,4));
+  // add new history element at the end
+  var temp = getAverageTemp();
+  history[history.length-1] = temp;
+  // remove previous graphics
+  graphics.clear();
+  graphics.setFontBitmap();
+  // Draw Graph
+  var r = require("graph").drawLine(graphics, history, {
+    miny: 40,
+    maxy: 100,
+    axes : true,
+    gridy : 20,
+    title: "Temperature: " + temp + " F"
+  });
+  // Label last reading
+  graphics.setFontAlign(1,-1);
+  graphics.drawString(Math.round(temp), r.x+r.w, r.gety(temp)+2);
+  // Update the screen
+  graphics.flip();
 }
 
 function refreshTemps(){
