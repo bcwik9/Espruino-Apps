@@ -60,10 +60,3 @@ Example of how to use HTTP POST to send data to an [Adafruit IO account](https:/
 
 ### adafruit_mqtt.js
 Example of how to use MQTT to send data to an [Adafruit IO account](https://io.adafruit.com) once set up.
-
-### captive_portal.js
-Example of starting a wifi access point (AP) to let a user enter wifi credentials for their personal network to let the device connect to the internet, without having to program the device directly (ie. non-technical users can set up wifi).
-
-Original sources:
-- https://gist.github.com/MaBecker/ae9dade26b44524e076ca19f5fd72fab
-- https://gist.githubusercontent.com/wilberforce/cc6025a535b8a4c7e2910d4ba7845f11
