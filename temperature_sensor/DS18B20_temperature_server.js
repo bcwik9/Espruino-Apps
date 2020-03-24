@@ -9,8 +9,8 @@ E.on('init', function() {
   var wifi = require('Wifi');
   wifi.setHostname("EspBedroomTemp");
   wifi.connect(
-    '<WIFI SSID HERE>',
-    { password: '<WIFI PASSWORD HERE>' },
+    '<WIFI SSID NAME>',
+    { password: '<WIFI PASSWORD>' },
     function(err) {
       if (err) {
         console.log('Connection error: ' + err);
@@ -43,23 +43,26 @@ function writeDisplay(){
   setTimeout(writeDisplayGraph, 30000);
 }
 
-var history = new Float32Array(64);
+var history = new Float32Array(128);
 
 function writeDisplayGraph() {
   // quickly move all elements of history back one
   history.set(new Float32Array(history.buffer,4));
   // add new history element at the end
   var temp = getAverageTemp();
+  if(!isTempValid(temp)){
+   return;
+  }
   history[history.length-1] = temp;
   // remove previous graphics
   graphics.clear();
   graphics.setFontBitmap();
   // Draw Graph
   var r = require("graph").drawLine(graphics, history, {
-    miny: 40,
-    maxy: 100,
+    //miny: 40,
+    //maxy: 100,
     axes : true,
-    gridy : 20,
+    gridy : 1,
     title: "Temperature: " + temp + " F"
   });
   // Label last reading
@@ -90,6 +93,12 @@ function analyzeTemps(){
     }
     sum += farenheit;
   });
+}
+
+function isTempValid(temp){
+  var min_temp = 35;
+  var max_temp = 130;
+  return (temp >= min_temp && temp <= max_temp);
 }
 
 function setupSensors(){
@@ -133,7 +142,7 @@ function mqttPublish(){
   refreshTemps();
   // don't publish bad data
   var avg_temp = getAverageTemp();
-  if(avg_temp < 35 || avg_temp > 150){
+  if(!isTempValid(avg_temp)){
     return;
   }
   // see https://docs.influxdata.com/influxdb/v1.7/write_protocols/line_protocol_tutorial/
