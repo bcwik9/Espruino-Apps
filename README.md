@@ -40,3 +40,14 @@ wifi.save(); // load hostname even if power loss/restart
 It's a good place for project ideas and sensors.
 
 There are also [instructions on how to write your own custom modules](https://www.espruino.com/Writing+Modules) and load them straight from github.
+
+## Guides
+- [my eBay parts list](https://www.ebay.com/myb/WatchList?custom_list_id=640684863013)
+- Power Saving
+  - [Power Saving and batteries](https://github.com/z2amiller/sensorboard/blob/master/PowerSaving.md)
+  - [Battery setup parts list guide](https://github.com/happytm/BatteryNode)
+  - Use ESP8266/ESP32 [deepSleep](http://www.espruino.com/Reference#l_ESP8266_deepSleep) to save power (ie. `require("ESP8266").deepSleep(micros, option)`)
+    - note: ESP8266 and ESP32 each have different deepSleep functions/libraries
+- [recharge battery with solar power](https://randomnerdtutorials.com/power-esp32-esp8266-solar-panels-battery-level-monitoring/)
+- [SIM800L](https://www.espruino.com/SIM900)
+  - [connection guide/pinout](https://lastminuteengineers.com/sim800l-gsm-module-arduino-tutorial/)
