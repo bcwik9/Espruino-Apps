@@ -36,7 +36,7 @@ wifi.save(); // load hostname even if power loss/restart
   - It might appear that the ESP chip is working, but some things will not work until enough power is supplied (ie. you might be able to flash firmware, but not run/connect to Espruino via `screen` command). Certain functions like PWM or pin output might behave oddly.
 
 ### ESP12E non-development (NodeMCU, Wemos) setup
-The bare ESP12E non-development board (ie. one without a micro usb connection and other chips built-in) requires some connections be made before it will start. After programming the chip (via a "frog" board or usb-to-uart serial adapter), make the following connections or the ESP12E won't boot correctly:
+The bare ESP12E **non-development board** (ie. one without a micro usb connection and other chips built-in) requires some connections be made before it will start. After programming the chip (via a "frog" board or usb-to-uart serial adapter), make the following connections or the ESP12E won't boot correctly:
 ESP8266 Pin | Connection
 --- | ---
 GND | GND
