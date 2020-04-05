@@ -37,11 +37,12 @@ wifi.save(); // load hostname even if power loss/restart
 
 ### ESP12E non-development (NodeMCU, Wemos) setup
 The bare ESP12E non-development board (ie. one without a micro usb connection and other chips built-in) requires some connections be made before it will start. After programming the chip (via a "frog" board or usb-to-uart serial adapter), make the following connections or the ESP12E won't boot correctly:
-| ESP8266 Pin | Connection |
-| GND | GND |
-| VCC | 3.3v |
-| EN (or CH_PD) | 3.3v |
-| GPIO15 | GND |
+ESP8266 Pin | Connection
+--- | ---
+GND | GND
+VCC | 3.3v
+EN (or CH_PD) | 3.3v
+GPIO15 | GND
 
 If you want to utilize [deep sleep](https://www.espruino.com/Reference#l_ESP8266_deepSleep), make sure you also connect `GPIO16` to `RESET (RST)` to allow the ESP8266 to wakeup after sleeping.
 If you are not using deep sleep, you should connect `RESET (RST)` to 3.3v power (not sure this is necessary).
