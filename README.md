@@ -47,6 +47,10 @@ GPIO15 | GND
 If you want to utilize [deep sleep](https://www.espruino.com/Reference#l_ESP8266_deepSleep), make sure you also connect `GPIO16` to `RESET (RST)` to allow the ESP8266 to wakeup after sleeping.
 If you are not using deep sleep, you should connect `RESET (RST)` to 3.3v power (not sure this is necessary).
 
+Sources:
+- https://www.hackster.io/brian-lough/3-simple-ways-of-programming-an-esp8266-12x-module-c514ee#toc-method-2--using-basically-any-usb-to-serial-converter-3
+- https://www.instructables.com/id/Getting-Started-with-the-ESP8266-ESP-12/ (see step 3)
+
 ## [Modules](https://www.espruino.com/Modules)
 [Espruino Modules](https://www.espruino.com/Modules) provide extended functionality for a variety of hardware and software services, such as One Wire interfaces, MQTT and database connections, WIFI functionality, graphical display interface libraries, and more.
 It's a good place for project ideas and sensors.
