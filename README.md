@@ -69,6 +69,9 @@ There are also [instructions on how to write your own custom modules](https://ww
   - [Battery setup parts list guide](https://github.com/happytm/BatteryNode)
   - Use ESP8266/ESP32 [deepSleep](http://www.espruino.com/Reference#l_ESP8266_deepSleep) to save power (ie. `require("ESP8266").deepSleep(micros, option)`)
     - note: ESP8266 and ESP32 each have different deepSleep functions/libraries
+  - [Solar powered temp sensor](https://www.reddit.com/r/esp8266/comments/nuzjrx/i_made_a_temperaturehumidity_monitor_using_a/)
+    - [Components](https://www.reddit.com/r/esp8266/comments/nuzjrx/i_made_a_temperaturehumidity_monitor_using_a/h10h1ju/?utm_source=reddit&utm_medium=web2x&context=3)
+    - [Algorithm](https://www.reddit.com/r/esp8266/comments/nuzjrx/i_made_a_temperaturehumidity_monitor_using_a/h10nkxh/?utm_source=reddit&utm_medium=web2x&context=3)
 - [recharge battery with solar power](https://randomnerdtutorials.com/power-esp32-esp8266-solar-panels-battery-level-monitoring/)
 - [SIM800L](https://www.espruino.com/SIM900)
   - [connection guide/pinout](https://lastminuteengineers.com/sim800l-gsm-module-arduino-tutorial/)
