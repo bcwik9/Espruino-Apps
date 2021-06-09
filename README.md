@@ -42,7 +42,7 @@ The bare ESP12E **non-development board** (ie. one without a micro usb connectio
 ESP8266 Pin | Connection | Resistor | Notes
 --- | --- | --- | ---
 GND | GND | None |
-VCC | 3.3v | None | 
+VCC | 3.3v | None | Be sure to use filtered 3.3v source (a typical USB charger is 5v which will burn it out!)
 EN (or CH_PD) | 3.3v | None |
 GPIO15 | GND | 2k to 10k |
 GPIO0 | 3.3v | 2k to 10k | Set to GND to enter UART bootload (programming mode)
