@@ -32,24 +32,29 @@ wifi.save(); // load hostname even if power loss/restart
 
 ### Common Issues
 - Not all USB cables support data transport (ie. some only supply power). If you can't connect try a couple different USB cables.
-- The USB port you use must provide a good amount of power for a ESP chip to run successfully. Usually a common PC USB port will not provide enough power. If you're having issues, try using a higher power USB port like a RaspberryPi provides.
+- The USB port you use must provide a good amount of power for a ESP chip to run successfully. Usually a common PC USB port will not provide enough power (and is not advised for anything except programming - you could burn your USB out). If you're having issues, try using a higher power USB port like a RaspberryPi provides.
   - It might appear that the ESP chip is working, but some things will not work until enough power is supplied (ie. you might be able to flash firmware, but not run/connect to Espruino via `screen` command). Certain functions like PWM or pin output might behave oddly.
+  - I don't advise using the USB connection as a power source as a long term solution. USB ports tend to wear out and have unreliable connections once they have some wiggle/play in them. A better solution is to use the VIN pin to provide dedicated power (just make sure it's filtered to 3.3v or whatever it needs to be so as to not burn out the chip, if not using a dev board).
 
 ### ESP12E non-development (NodeMCU, Wemos) setup
-The bare ESP12E **non-development board** (ie. one without a micro usb connection and other chips built-in) requires some connections be made before it will start. After programming the chip (via a "frog" board or usb-to-uart serial adapter), make the following connections or the ESP12E won't boot correctly:
-ESP8266 Pin | Connection
---- | ---
-GND | GND
-VCC | 3.3v
-EN (or CH_PD) | 3.3v
-GPIO15 | GND
+The bare ESP12E **non-development board** (ie. one without a micro usb connection and other chips built-in) requires some connections be made before it will start. After programming the chip (via a "frog" board or usb-to-uart serial adapter), make the following connections or the ESP12E won't boot correctly (it needs to be in the normal mode to boot from SPI Flash to run the code it was set up with). Note that some guides say you need to change GPIO2, but I don't think it's necessary.
+
+ESP8266 Pin | Connection | Resistor | Notes
+--- | --- | --- | ---
+GND | GND | None |
+VCC | 3.3v | None | 
+EN (or CH_PD) | 3.3v | None |
+GPIO15 | GND | 2k to 10k |
+GPIO0 | 3.3v | 2k to 10k | Set to GND to enter UART bootload (programming mode)
 
 If you want to utilize [deep sleep](https://www.espruino.com/Reference#l_ESP8266_deepSleep), make sure you also connect `GPIO16` to `RESET (RST)` to allow the ESP8266 to wakeup after sleeping.
 If you are not using deep sleep, you should connect `RESET (RST)` to 3.3v power (not sure this is necessary).
 
 Sources:
+- https://www.reddit.com/r/esp8266/comments/88dre0/do_you_need_a_resistor_when_pulling_chpd_en_up/
 - https://www.hackster.io/brian-lough/3-simple-ways-of-programming-an-esp8266-12x-module-c514ee#toc-method-2--using-basically-any-usb-to-serial-converter-3
 - https://www.instructables.com/id/Getting-Started-with-the-ESP8266-ESP-12/ (see step 3)
+- https://www.instructables.com/ESP8266-Using-GPIO0-GPIO2-as-inputs/
 
 ## [Modules](https://www.espruino.com/Modules)
 [Espruino Modules](https://www.espruino.com/Modules) provide extended functionality for a variety of hardware and software services, such as One Wire interfaces, MQTT and database connections, WIFI functionality, graphical display interface libraries, and more.
