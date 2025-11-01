@@ -22,7 +22,7 @@ Variety of lightweight [Espruino](https://github.com/espruino/Espruino) apps for
     - This command worked for a ESP-01: `esptool.py --port /dev/ttyUSB0 --baud 115200 write_flash --flash_freq 40m --flash_mode qio --flash_size 4m 0x0000 "boot_v1.6.bin" 0x1000 espruino_esp8266_user1.bin 0x7C000 esp_init_data_default.bin 0x7E000 blank.bin`
 - You should now be able to connect to the ESP8266 by running: `screen /dev/ttyUSB0 115200`
   - To kill a `screen` session, press `CTRL+a` then `k`. A prompt should ask confirming you want to close, press `y` to confirm and exit
-- On your windows computer (or mac?), use the [espruino web IDE UI editor](https://www.espruino.com/ide/#) to load code
+- On your windows computer (or mac?), use the [espruino web IDE UI editor](https://www.espruino.com/ide/#) to load code with Chrome browser
   - When getting a successful connection, you should see a message similar to `Found ESP8266_4MB, 2v27. Connected to Web Serial, webserial:0840:e1dc`
   - Alternatively, copy and paste the contents of whatever app js file to the ESP8266 terminal if it's simple and doesn't have modules. This won't work if you are loading other modules besides Wifi since they need to be uploaded via the [web UI](https://www.espruino.com/ide/#)
   - First be sure to replace your Wifi credentials in the file if applicable!
