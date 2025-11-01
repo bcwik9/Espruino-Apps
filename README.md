@@ -7,9 +7,12 @@ Variety of lightweight [Espruino](https://github.com/espruino/Espruino) apps for
 [Tutorial found here](https://cuneyt.aliustaoglu.biz/en/programming-esp8266-using-javascript-with-espruino/)
 
 [Pinout diagram here](https://lastminuteengineers.com/wp-content/uploads/2018/08/ESP-12E-Development-Board-ESP8266-NodeMCU-Pinout.jpg)
-- Flash your ESP8266 with [Espruino firmware](https://www.espruino.com/Download)
+- Flash your ESP8266 with [Espruino firmware](https://www.espruino.com/Download). I used a raspberry pi
+  - You might need drivers if using windows: https://www.silabs.com/software-and-tools/usb-to-uart-bridge-vcp-drivers?tab=downloads
   - I downloaded the "combined" file: `espruino_2v01_esp8266_4mb_combined_4096.bin`
-  - Run command to flash on linux (I flashed using a raspberry pi):
+  - clone [esptool repository](https://github.com/espressif/esptool#) and run `pyton setup.py install`
+    - might need to install dependencies: `sudo apt install python3-setuptools python3-pip -y`
+  - Run command:
     ```
     esptool.py --port /dev/ttyUSB0 erase_flash
     esptool.py --port /dev/ttyUSB0 --baud 115200 write_flash --flash_size=detect -fm dio 0 espruino_2v01_esp8266_4mb_combined_4096.bin
@@ -19,9 +22,10 @@ Variety of lightweight [Espruino](https://github.com/espruino/Espruino) apps for
     - This command worked for a ESP-01: `esptool.py --port /dev/ttyUSB0 --baud 115200 write_flash --flash_freq 40m --flash_mode qio --flash_size 4m 0x0000 "boot_v1.6.bin" 0x1000 espruino_esp8266_user1.bin 0x7C000 esp_init_data_default.bin 0x7E000 blank.bin`
 - You should now be able to connect to the ESP8266 by running: `screen /dev/ttyUSB0 115200`
   - To kill a `screen` session, press `CTRL+a` then `k`. A prompt should ask confirming you want to close, press `y` to confirm and exit
-- Copy and paste the contents of whatever app js file to the ESP8266 terminal
-  - This won't work if you are loading other modules besides Wifi since they need to be uploaded via the [web UI](https://chrome.google.com/webstore/detail/espruino-web-ide/bleoifhkdalbjfbobjackfdifdneehpo?hl=en)
-  - First be sure to replace your Wifi credentials in the file!
+- Use the [espruino web IDE UI editor](https://www.espruino.com/ide/#) to load code
+  - When getting a successful connection, you should see a message similar to `Found ESP8266_4MB, 2v27. Connected to Web Serial, webserial:0840:e1dc`
+  - Alternatively, copy and paste the contents of whatever app js file to the ESP8266 terminal if it's simple and doesn't have modules. This won't work if you are loading other modules besides Wifi since they need to be uploaded via the [web UI](https://www.espruino.com/ide/#)
+  - First be sure to replace your Wifi credentials in the file if applicable!
 - (Optional) Run this command to set the name of your device to something recognizable in your router list and to other devices:
 ```
 var wifi = require('Wifi');
@@ -32,6 +36,7 @@ wifi.save(); // load hostname even if power loss/restart
 
 ### Common Issues
 - Not all USB cables support data transport (ie. some only supply power). If you can't connect try a couple different USB cables.
+- If you are getting weird USB errors/connection issues, sometimes wiggling the USB cable around can help create a connection. Looking at the device manager should help.
 - The USB port you use must provide a good amount of power for a ESP chip to run successfully. Usually a common PC USB port will not provide enough power (and is not advised for anything except programming - you could burn your USB out). If you're having issues, try using a higher power USB port like a RaspberryPi provides.
   - It might appear that the ESP chip is working, but some things will not work until enough power is supplied (ie. you might be able to flash firmware, but not run/connect to Espruino via `screen` command). Certain functions like PWM or pin output might behave oddly.
   - I don't advise using the USB connection as a power source as a long term solution. USB ports tend to wear out and have unreliable connections once they have some wiggle/play in them. A better solution is to use the VIN pin to provide dedicated power (just make sure it's filtered to 3.3v or whatever it needs to be so as to not burn out the chip, if not using a dev board).
