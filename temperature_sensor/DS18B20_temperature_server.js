@@ -1,5 +1,4 @@
-// I2C, for displaying data on a 0.96" OLED SSD1306 screen
-var graphics;
+var graphics; // I2C, for displaying data on a 0.96" OLED SSD1306 screen
 
 // track sensors and temps
 var temps = {};
@@ -151,4 +150,4 @@ function mqttPublish(){
   mqtt.publish('temperature', influxDbLine);
 }
 
-save(); // make sure everything loads on restart
+//save(); // make sure everything loads on restart
